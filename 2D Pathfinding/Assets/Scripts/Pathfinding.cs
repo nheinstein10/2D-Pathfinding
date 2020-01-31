@@ -7,6 +7,8 @@ using System;
 
 namespace Pathfinding.Algorithms {
     public class Pathfinding : MonoBehaviour {
+        public static Pathfinding instance;
+
         GameObject destinationNode;
         GameObject currentNode;
 
@@ -15,7 +17,11 @@ namespace Pathfinding.Algorithms {
 
         List<float> currentWeightValueList;
 
-        Graph g;
+        public Graph g;
+
+        private void Awake() {
+            instance = this;
+        }
 
         private void Start() {
             SetupGameNodeGraph();
@@ -23,6 +29,7 @@ namespace Pathfinding.Algorithms {
             currentNode = MapNodeManager.instance.sourceNode;
 
             //g.BFS(1);
+            Debug.Log(g.IsEdge(3, 4));
 
             int[,] graph =  {
                          { 0, 6, 0, 0, 0, 0, 0, 9, 0 },
@@ -37,16 +44,16 @@ namespace Pathfinding.Algorithms {
                             };
 
             int[,] gameGraph = new int[MapNodeManager.instance.GetNodeList().Count, MapNodeManager.instance.GetNodeList().Count];
-            gameGraph = AlgorithmProcessing.ExtractAdjacencyMatrix(MapNodeManager.instance.GetNodeList());
+            gameGraph = AlgorithmProcessing.ExtractAdjacencyMatrix(0, MapNodeManager.instance.GetNodeList());
             Debug.Log(MapNodeManager.instance.GetNodeList().Count);
-            foreach(var el in MapNodeManager.instance.GetNodeList()) {
-                Debug.Log(el.name);
-            }
+            //foreach(var el in MapNodeManager.instance.GetNodeList()) {
+            //    Debug.Log(el.name);
+            //}
 
-            for(int i = 0; i < 5; i++) {
+            for(int i = 0; i < MapNodeManager.instance.nodesCount; i++) {
                 Debug.Log(((Func<string>)(() => {
                     string result = "";
-                    for(int j = 0; j < 5; j++) {
+                    for(int j = 0; j < MapNodeManager.instance.nodesCount; j++) {
                         result += gameGraph[i, j] + " ";
                     }
                     return result;
@@ -63,19 +70,22 @@ namespace Pathfinding.Algorithms {
             g.AddEdge(1, 2);
             g.AddEdge(2, 0);
             g.AddEdge(2, 3);
-            g.AddEdge(3, 3);
-            g.AddEdge(1, 3);
+            //g.AddEdge(1, 3);
             g.AddEdge(3, 0);
+            g.AddEdge(3, 4);
+            //g.AddEdge(0, 4);
         }
     }
 
     public class Graph {
         private int V; // no. of vertices
         private List<int>[] adjList;
+        public bool[,] booleanAdjMatrix;
 
         public Graph(int v) {
             this.V = v;
             adjList = new List<int>[V];
+            booleanAdjMatrix = new bool[V, V];
             for (int i = 0; i < adjList.Length; i++) {
                 adjList[i] = new List<int>();
             }
@@ -83,6 +93,12 @@ namespace Pathfinding.Algorithms {
 
         public void AddEdge(int v, int w) {
             adjList[v].Add(w);
+            booleanAdjMatrix[v, w] = true;
+            booleanAdjMatrix[w, v] = true;
+        }
+
+        public bool IsEdge(int v, int w) {
+            return booleanAdjMatrix[v, w];
         }
 
         public void BFS(int s) {
@@ -115,6 +131,55 @@ namespace Pathfinding.Algorithms {
                     }
                 }
             }
+        }
+
+        // A BFS based function to check whether d is reachable from s. 
+        public bool isReachable(int s, int d) { // s: source, d: destination
+            LinkedList<int> temp;
+
+            // Mark all the vertices as not visited(By default set 
+            // as false) 
+            bool[] visited = new bool[V];
+
+            // Create a queue for BFS 
+            LinkedList<int> queue = new LinkedList<int>();
+
+            // Mark the current node as visited and enqueue it 
+            visited[s] = true;
+            queue.AddLast(s);
+
+            // 'i' will be used to get all adjacent vertices of a vertex 
+            IEnumerator<int> i;
+            while (queue.Count != 0) {
+                // Dequeue a vertex from queue and print it
+                s = queue.First();
+                queue.RemoveFirst();
+
+                int n;
+                i = adjList[s].GetEnumerator();
+
+                // Get all adjacent vertices of the dequeued vertex s 
+                // If a adjacent has not been visited, then mark it 
+                // visited and enqueue it 
+                while (i.MoveNext()) {
+                    n = i.Current;
+
+                    // If this adjacent node is the destination node, 
+                    // then return true 
+                    if (n == d) {
+                        return true;
+                    }
+
+                    // Else, continue to do BFS 
+                    if (!visited[n]) {
+                        visited[n] = true;
+                        queue.AddLast(n);
+                    }
+                }
+            }
+
+            // If BFS is complete without visited d 
+            return false;
         }
     }
 

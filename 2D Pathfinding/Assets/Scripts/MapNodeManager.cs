@@ -14,6 +14,7 @@ namespace Pathfinding.Map {
 
         public GameObject sourceNode;
         [HideInInspector] public GameObject nearestNode;
+        public int theNearestNodeIndex = default;
 
         private void Awake() {
             instance = this;
@@ -41,6 +42,7 @@ namespace Pathfinding.Map {
             if(Input.GetKeyDown(KeyCode.Mouse0)) {
                 var nearestNode = Geometry.GetNearestNodeToMouseClickPos(Camera.main.ScreenToWorldPoint(Input.mousePosition), nodes);
                 Debug.Log(nearestNode.transform.position);
+                Debug.Log(nearestNode.name);
             }
         }
 
