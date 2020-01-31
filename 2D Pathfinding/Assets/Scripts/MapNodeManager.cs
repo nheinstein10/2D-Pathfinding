@@ -44,6 +44,8 @@ namespace Pathfinding.Map {
             }
         }
 
+        public List<GameObject> GetNodeList() => nodes;
+
         public void CreateNewNode() {
             var tempObject = new GameObject();
             tempObject.name = "Node-" + nodesCount;

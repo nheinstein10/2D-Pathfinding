@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding.Map;
+using Pathfinding.Algorithms;
 
 namespace Pathfinding.Gameplay {
     public class CharacterBehaviour : MonoBehaviour {
