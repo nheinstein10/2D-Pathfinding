@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using Pathfinding.Utility;
 using System.Collections.Generic;
 using UnityEngine;
-using Pathfinding.Utility;
 
 namespace Pathfinding.Map {
     [ExecuteInEditMode]
@@ -16,6 +15,8 @@ namespace Pathfinding.Map {
         [HideInInspector] public GameObject nearestNode;
         public int theNearestNodeIndex = default;
 
+        [SerializeField] Material lineShader;
+
         private void Awake() {
             instance = this;
         }
@@ -23,9 +24,10 @@ namespace Pathfinding.Map {
         private void Start() {
             sourceNode = nodes[0];
             //DrawLine();
+            DrawLineAllConnectedNodes();
         }
 
-        private void DrawLine() {
+        public void DrawLine() {
             var line = new GameObject();
             line.AddComponent<LineRenderer>();
             line.name = "Line-0";
@@ -34,17 +36,52 @@ namespace Pathfinding.Map {
             positions[1] = nodes[1].transform.position;
             line.GetComponent<LineRenderer>().SetPositions(positions);
             line.GetComponent<LineRenderer>().SetWidth(0.2f, 0.2f);
+            line.GetComponent<LineRenderer>().material = lineShader;
+        }
+
+        // overload
+        public void DrawLine(Vector3 pos1, Vector3 pos2) {
+            var line = new GameObject();
+            line.AddComponent<LineRenderer>();
+            line.name = "Line-0";
+            Vector3[] positions = new Vector3[2];
+            positions[0] = pos1;
+            positions[1] = pos2;
+            line.GetComponent<LineRenderer>().SetPositions(positions);
+            line.GetComponent<LineRenderer>().SetWidth(0.2f, 0.2f);
+            line.GetComponent<LineRenderer>().material = lineShader;
+        }
+
+        public void DrawLineAllConnectedNodes() {
+            for (int i = 0; i < nodesCount; i++) {
+                for (int j = 0; j < nodesCount; j++) {
+                    if (i == j) {
+                        continue;
+                    } else {
+                        if (Pathfinding.Algorithms.Pathfinding.instance.g.IsEdge(i, j)) {
+                            DrawLine(nodes[i].transform.position, nodes[j].transform.position);
+                        }
+                    }
+                }
+            }
         }
 
         private void Update() {
             nodesCount = nodes.Count;
 
-            if(Input.GetKeyDown(KeyCode.Mouse0)) {
+            if (Input.GetKeyDown(KeyCode.Mouse0)) {
                 var nearestNode = Geometry.GetNearestNodeToMouseClickPos(Camera.main.ScreenToWorldPoint(Input.mousePosition), nodes);
                 Debug.Log(nearestNode.transform.position);
                 Debug.Log(nearestNode.name);
             }
         }
+
+        //private void OnGUI() {
+        //    //GUILayout.BeginArea(new Rect(10, 10, 100, 100));
+        //    if (GUILayout.Button("Add New Node")) {
+        //        CreateNewNode();
+        //    }
+        //}
 
         public List<GameObject> GetNodeList() => nodes;
 
