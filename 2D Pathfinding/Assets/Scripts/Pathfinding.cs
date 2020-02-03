@@ -71,7 +71,7 @@ namespace Pathfinding.Algorithms {
             }
 
             //Dijkstra.DijkstraAlgo(gameGraph, 0, MapNodeManager.instance.GetNodeList().Count);
-            DijkstrasAlgorithm.dijkstra(gameGraph, 0);
+            DijkstrasAlgorithm.dijkstra(gameGraph, 3);
         }
 
         void SetupGameNodeGraph() {
@@ -292,15 +292,19 @@ namespace Pathfinding.Algorithms {
                                         int[] distances,
                                         int[] parents) {
             int nVertices = distances.Length;
-            Debug.Log("Vertex\t Distance\tPath");
 
             for (int vertexIndex = 0;
                     vertexIndex < nVertices;
                     vertexIndex++) {
                 if (vertexIndex != startVertex) {
+                    Debug.Log("Vertex: ");
                     Debug.Log("\n" + startVertex + " -> ");
                     Debug.Log(vertexIndex + " \t\t ");
+
+                    Debug.Log("Distance: ");
                     Debug.Log(distances[vertexIndex]);
+
+                    Debug.Log("Path: ");
                     printPath(vertexIndex, parents);
                 }
             }
