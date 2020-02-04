@@ -18,12 +18,14 @@ namespace Pathfinding.Algorithms {
         List<float> currentWeightValueList;
 
         public Graph g;
+        public DijkstrasAlgorithm dijkstrasAlgorithm_Instance;
 
         private void Awake() {
             instance = this;
         }
 
         private void Start() {
+            dijkstrasAlgorithm_Instance = new DijkstrasAlgorithm();
             SetupGameNodeGraph();
             destinationNode = MapNodeManager.instance.nearestNode;
             currentNode = MapNodeManager.instance.sourceNode;
@@ -70,12 +72,16 @@ namespace Pathfinding.Algorithms {
                 }))());
             }
 
-            //Dijkstra.DijkstraAlgo(gameGraph, 0, MapNodeManager.instance.GetNodeList().Count);
-            DijkstrasAlgorithm.dijkstra(gameGraph, 3);
+            var testList = new List<int>();
+            DijkstrasAlgorithm.dijkstra(gameGraph, 2, 5, testList);
+            Debug.Log("Solution: ");
+            foreach (var el in testList) {
+                Debug.Log(el);
+            }
         }
 
         void SetupGameNodeGraph() {
-            g = new Graph(5);
+            g = new Graph(MapNodeManager.instance.nodesCount);
             g.AddEdge(0, 1);
             g.AddEdge(0, 2);
             g.AddEdge(1, 2);
@@ -86,6 +92,11 @@ namespace Pathfinding.Algorithms {
             //g.AddEdge(3, 4);
             //g.AddEdge(0, 4);
             g.AddEdge(2, 4);
+            g.AddEdge(6, 7);
+            g.AddEdge(1, 8);
+            g.AddEdge(2, 9);
+            g.AddEdge(7, 9);
+            g.AddEdge(5, 8);
         }
     }
 
@@ -199,13 +210,19 @@ namespace Pathfinding.Algorithms {
 
         private static readonly int NO_PARENT = -1;
 
+        public List<KeyValuePair<int, int>> distanceFromSourceList;
+
+        public DijkstrasAlgorithm() {
+            distanceFromSourceList = new List<KeyValuePair<int, int>>();
+        }
+
         // Function that implements Dijkstra's  
         // single source shortest path  
         // algorithm for a graph represented  
         // using adjacency matrix  
         // representation  
         public static void dijkstra(int[,] adjacencyMatrix,
-                                            int startVertex) {
+                                            int startVertex, int destinationIndex, List<int> solutionList) {
             int nVertices = adjacencyMatrix.GetLength(0);
 
             // shortestDistances[i] will hold the  
@@ -282,7 +299,11 @@ namespace Pathfinding.Algorithms {
                 }
             }
 
+            // print solutions
             printSolution(startVertex, shortestDistances, parents);
+
+            // get solution
+            getSolution_fromSourceToDestination(startVertex, destinationIndex, shortestDistances, parents, solutionList);
         }
 
         // A utility function to print  
@@ -323,6 +344,20 @@ namespace Pathfinding.Algorithms {
             }
             printPath(parents[currentVertex], parents);
             Debug.Log(currentVertex + " ");
-        }       
+        }
+
+        public static void getSolution_fromSourceToDestination(int startVertex, int destinationIndex, int[] distances, int[] parents, List<int> solutionList) {
+            if(destinationIndex != startVertex) {
+                getPath(destinationIndex, parents, solutionList);
+            }
+        }
+
+        public static void getPath(int currentVertex, int[] parents, List<int> solutionList) {
+            if (currentVertex == NO_PARENT) {
+                return;
+            }
+            getPath(parents[currentVertex], parents, solutionList);
+            solutionList.Add(currentVertex);
+        }
     }
 }

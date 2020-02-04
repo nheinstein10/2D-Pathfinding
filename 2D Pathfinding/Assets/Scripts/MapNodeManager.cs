@@ -15,7 +15,7 @@ namespace Pathfinding.Map {
         [HideInInspector] public GameObject nearestNode;
         public int theNearestNodeIndex = default;
 
-        [SerializeField] Material lineShader;
+        [SerializeField] Material lineMaterial;
 
         private void Awake() {
             instance = this;
@@ -36,20 +36,20 @@ namespace Pathfinding.Map {
             positions[1] = nodes[1].transform.position;
             line.GetComponent<LineRenderer>().SetPositions(positions);
             line.GetComponent<LineRenderer>().SetWidth(0.2f, 0.2f);
-            line.GetComponent<LineRenderer>().material = lineShader;
+            line.GetComponent<LineRenderer>().material = lineMaterial;
         }
 
         // overload
-        public void DrawLine(Vector3 pos1, Vector3 pos2) {
+        public void DrawLine(Vector3 pos1, int nodeIndex1, Vector3 pos2, int nodeIndex2) {
             var line = new GameObject();
             line.AddComponent<LineRenderer>();
-            line.name = "Line-0";
+            line.name = nodeIndex1.ToString() + "-" + nodeIndex2.ToString();
             Vector3[] positions = new Vector3[2];
             positions[0] = pos1;
             positions[1] = pos2;
             line.GetComponent<LineRenderer>().SetPositions(positions);
             line.GetComponent<LineRenderer>().SetWidth(0.2f, 0.2f);
-            line.GetComponent<LineRenderer>().material = lineShader;
+            line.GetComponent<LineRenderer>().material = lineMaterial;
         }
 
         public void DrawLineAllConnectedNodes() {
@@ -59,7 +59,7 @@ namespace Pathfinding.Map {
                         continue;
                     } else {
                         if (Pathfinding.Algorithms.Pathfinding.instance.g.IsEdge(i, j)) {
-                            DrawLine(nodes[i].transform.position, nodes[j].transform.position);
+                            DrawLine(nodes[i].transform.position, i, nodes[j].transform.position, j);
                         }
                     }
                 }
