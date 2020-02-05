@@ -765,7 +765,7 @@ MonoBehaviour:
   - {fileID: 1519043385}
   - {fileID: 1034201880}
   nodesCount: 10
-  sourceNode: {fileID: 1101265923}
+  sourceNodeIndex: 4
   nearestNode: {fileID: 0}
   theNearestNodeIndex: 0
   lineMaterial: {fileID: 2100000, guid: 4411a8aaf0dba4c48a93e63eb776dd9a, type: 2}

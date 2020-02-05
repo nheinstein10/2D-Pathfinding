@@ -7,7 +7,7 @@ using Pathfinding.Algorithms;
 namespace Pathfinding.Gameplay {
     public class CharacterBehaviour : MonoBehaviour {
         private void Start() {
-            transform.position = MapNodeManager.instance.sourceNode.transform.position;
+            //something
         }
     }
 }

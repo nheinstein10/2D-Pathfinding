@@ -28,7 +28,6 @@ namespace Pathfinding.Algorithms {
             dijkstrasAlgorithm_Instance = new DijkstrasAlgorithm();
             SetupGameNodeGraph();
             destinationNode = MapNodeManager.instance.nearestNode;
-            currentNode = MapNodeManager.instance.sourceNode;
 
             //g.BFS(1);
             //Debug.Log(g.IsEdge(3, 4));

@@ -12,7 +12,7 @@ namespace Pathfinding.Map {
 
         public int nodesCount;
 
-        public GameObject sourceNode;
+        public int sourceNodeIndex;
         [HideInInspector] public GameObject nearestNode;
         public int theNearestNodeIndex = default;
 
@@ -27,7 +27,6 @@ namespace Pathfinding.Map {
         }
 
         private void Start() {
-            sourceNode = nodes[0];
             gameGraph = AlgorithmProcessing.ExtractWeightedAdjacencyMatrix(nodes);
             //DrawLine();
             DrawLineAllConnectedNodes();
@@ -81,7 +80,7 @@ namespace Pathfinding.Map {
                 Debug.Log(nearestNode.name);
                 var currentDestinationIndex = int.Parse(nearestNode.name.Split('-')[1]);
                 Debug.Log(currentDestinationIndex);
-                DijkstrasAlgorithm.dijkstra(gameGraph, 0, currentDestinationIndex, currentSolutionList);
+                DijkstrasAlgorithm.dijkstra(gameGraph, sourceNodeIndex, currentDestinationIndex, currentSolutionList);
                 Debug.Log("Solution: ");
                 foreach(var el in currentSolutionList) {
                     Debug.Log(el);
