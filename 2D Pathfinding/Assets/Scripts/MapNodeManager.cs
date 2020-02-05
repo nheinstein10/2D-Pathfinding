@@ -17,6 +17,7 @@ namespace Pathfinding.Map {
         public int theNearestNodeIndex = default;
 
         [SerializeField] Material lineMaterial;
+        [SerializeField] Material greenLineMaterial;
 
         public int[,] gameGraph = default;
         public List<int> currentSolutionList = default;
@@ -84,6 +85,11 @@ namespace Pathfinding.Map {
                 Debug.Log("Solution: ");
                 foreach(var el in currentSolutionList) {
                     Debug.Log(el);
+                }
+
+                for(int i = 0; i < currentSolutionList.Count - 1; i++) {
+                    GameObject.Find(currentSolutionList[i].ToString() + "-" + currentSolutionList[i + 1].ToString()).GetComponent<LineRenderer>().material = greenLineMaterial;
+                    GameObject.Find(currentSolutionList[i + 1].ToString() + "-" + currentSolutionList[i].ToString()).GetComponent<LineRenderer>().material = greenLineMaterial;
                 }
             }
         }

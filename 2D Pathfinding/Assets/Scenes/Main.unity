@@ -769,6 +769,7 @@ MonoBehaviour:
   nearestNode: {fileID: 0}
   theNearestNodeIndex: 0
   lineMaterial: {fileID: 2100000, guid: 4411a8aaf0dba4c48a93e63eb776dd9a, type: 2}
+  greenLineMaterial: {fileID: 2100000, guid: b869bee0101294f4e9e27675a2d89abb, type: 2}
   currentSolutionList: 
 --- !u!1 &1790460355
 GameObject:
