@@ -1,6 +1,7 @@
 ﻿using Pathfinding.Utility;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding.Algorithms;
 
 namespace Pathfinding.Map {
     [ExecuteInEditMode]
@@ -17,12 +18,16 @@ namespace Pathfinding.Map {
 
         [SerializeField] Material lineMaterial;
 
+        public int[,] gameGraph = default;
+        public List<int> currentSolutionList = default;
+
         private void Awake() {
             instance = this;
         }
 
         private void Start() {
             sourceNode = nodes[0];
+            gameGraph = AlgorithmProcessing.ExtractWeightedAdjacencyMatrix(nodes);
             //DrawLine();
             DrawLineAllConnectedNodes();
         }
@@ -73,6 +78,13 @@ namespace Pathfinding.Map {
                 var nearestNode = Geometry.GetNearestNodeToMouseClickPos(Camera.main.ScreenToWorldPoint(Input.mousePosition), nodes);
                 Debug.Log(nearestNode.transform.position);
                 Debug.Log(nearestNode.name);
+                var currentDestinationIndex = int.Parse(nearestNode.name.Split('-')[1]);
+                Debug.Log(currentDestinationIndex);
+                DijkstrasAlgorithm.dijkstra(gameGraph, 0, currentDestinationIndex, currentSolutionList);
+                Debug.Log("Solution: ");
+                foreach(var el in currentSolutionList) {
+                    Debug.Log(el);
+                }
             }
         }
 

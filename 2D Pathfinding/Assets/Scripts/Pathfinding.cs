@@ -56,7 +56,7 @@ namespace Pathfinding.Algorithms {
                                     { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
 
             int[,] gameGraph = new int[MapNodeManager.instance.GetNodeList().Count, MapNodeManager.instance.GetNodeList().Count];
-            gameGraph = AlgorithmProcessing.ExtractWeightedAdjacencyMatrix(0, MapNodeManager.instance.GetNodeList());
+            gameGraph = AlgorithmProcessing.ExtractWeightedAdjacencyMatrix(MapNodeManager.instance.GetNodeList());
             Debug.Log(MapNodeManager.instance.GetNodeList().Count);
             //foreach(var el in MapNodeManager.instance.GetNodeList()) {
             //    Debug.Log(el.name);
@@ -72,12 +72,12 @@ namespace Pathfinding.Algorithms {
                 }))());
             }
 
-            var testList = new List<int>();
-            DijkstrasAlgorithm.dijkstra(gameGraph, 2, 5, testList);
-            Debug.Log("Solution: ");
-            foreach (var el in testList) {
-                Debug.Log(el);
-            }
+            //var testList = new List<int>();
+            //DijkstrasAlgorithm.dijkstra(gameGraph, 6, 5, testList);
+            //Debug.Log("Solution: ");
+            //foreach (var el in testList) {
+            //    Debug.Log(el);
+            //}
         }
 
         void SetupGameNodeGraph() {
@@ -97,6 +97,8 @@ namespace Pathfinding.Algorithms {
             g.AddEdge(2, 9);
             g.AddEdge(7, 9);
             g.AddEdge(5, 8);
+            g.AddEdge(6, 8);
+            g.AddEdge(3, 6);
         }
     }
 
@@ -300,7 +302,7 @@ namespace Pathfinding.Algorithms {
             }
 
             // print solutions
-            printSolution(startVertex, shortestDistances, parents);
+            //printSolution(startVertex, shortestDistances, parents);
 
             // get solution
             getSolution_fromSourceToDestination(startVertex, destinationIndex, shortestDistances, parents, solutionList);

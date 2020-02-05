@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Pathfinding.Algorithms {
     public static class AlgorithmProcessing {
-        public static int[,] ExtractWeightedAdjacencyMatrix(int sourceNodeIndex, List<GameObject> nodes) {
+        public static int[,] ExtractWeightedAdjacencyMatrix(List<GameObject> nodes) {
             int[,] adjacencyMatrix = new int[nodes.Count, nodes.Count];
 
             for(int i = 0; i < nodes.Count; i++) {
